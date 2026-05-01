@@ -1,0 +1,188 @@
+/**
+ * Seed data for development / first-run experience.
+ * This is loaded once into localStorage if no data exists.
+ */
+
+export const MOCK_PRESENTS = [
+  {
+    id: 'present_1',
+    title: "Emma's 30th Birthday",
+    recipient: {
+      id: 'rec_1',
+      name: 'Emma',
+      email: 'emma@example.com',
+      relationship: 'Sister',
+    },
+    status: 'published',
+    landingPage: {
+      heroTitle: 'Happy 30th, Emma',
+      heroSubtitle: 'A little something special for you',
+      heroMessage: "Thirty trips around the sun, and you've only gotten more wonderful. Pick something that makes you smile.",
+      heroImageUrl: null,
+      theme: 'warm',
+    },
+    giftOptions: [
+      {
+        id: 'gift_opt_1',
+        presentId: 'present_1',
+        giftIdeaId: null,
+        title: 'Weekend Spa Retreat',
+        description: 'Two nights at a luxury spa hotel of your choice.',
+        priceRange: '$300–500',
+        imageUrl: null,
+        detailSections: [
+          {
+            id: 'sec_1',
+            type: 'text',
+            content: "You deserve a proper reset. We'll book whichever spa you fancy — all you have to do is show up and relax.",
+          },
+        ],
+        order: 0,
+      },
+      {
+        id: 'gift_opt_2',
+        presentId: 'present_1',
+        giftIdeaId: null,
+        title: 'Cooking Masterclass',
+        description: 'A full-day hands-on class with a professional chef.',
+        priceRange: '$150–250',
+        imageUrl: null,
+        detailSections: [
+          {
+            id: 'sec_2',
+            type: 'text',
+            content: 'Chose a cuisine, choose a date, and I\'ll make it happen. Italian, Japanese, French — you pick.',
+          },
+        ],
+        order: 1,
+      },
+    ],
+    finalScreen: {
+      title: "Can't wait to celebrate with you",
+      message: 'Whatever you choose, it\'ll be a brilliant day. Love you lots.',
+      ctaLabel: 'Send my choice',
+    },
+    publishSettings: {
+      isPublished: true,
+      publishedAt: '2024-11-15T10:00:00.000Z',
+      slug: 'emma-30th',
+      requiresPassword: false,
+      password: null,
+      expiresAt: null,
+    },
+    createdAt: '2024-11-10T09:00:00.000Z',
+    updatedAt: '2024-11-15T10:00:00.000Z',
+  },
+  {
+    id: 'present_2',
+    title: "Dad's Retirement",
+    recipient: {
+      id: 'rec_2',
+      name: 'Dad',
+      email: null,
+      relationship: 'Father',
+    },
+    status: 'draft',
+    landingPage: {
+      heroTitle: 'Congratulations on retiring, Dad',
+      heroSubtitle: 'After all these years, it\'s your turn',
+      heroMessage: 'Pick something you\'ve always wanted but never had time for.',
+      heroImageUrl: null,
+      theme: 'warm',
+    },
+    giftOptions: [],
+    finalScreen: {
+      title: 'So proud of everything you\'ve done',
+      message: 'This is just the beginning of the best chapter.',
+      ctaLabel: 'Send my choice',
+    },
+    publishSettings: {
+      isPublished: false,
+      publishedAt: null,
+      slug: 'dad-retirement',
+      requiresPassword: false,
+      password: null,
+      expiresAt: null,
+    },
+    createdAt: '2024-12-01T14:30:00.000Z',
+    updatedAt: '2024-12-01T14:30:00.000Z',
+  },
+]
+
+export const MOCK_GIFT_IDEAS = [
+  {
+    id: 'idea_1',
+    title: 'Weekend Spa Retreat',
+    description: 'A restorative weekend at a luxury spa hotel.',
+    category: 'Wellness',
+    priceRange: '$300–500',
+    tags: ['relaxation', 'hotel', 'spa', 'weekend'],
+    imageUrl: null,
+    createdAt: '2024-10-01T08:00:00.000Z',
+    updatedAt: '2024-10-01T08:00:00.000Z',
+  },
+  {
+    id: 'idea_2',
+    title: 'Cooking Masterclass',
+    description: 'A hands-on cooking class with a professional chef.',
+    category: 'Experience',
+    priceRange: '$150–250',
+    tags: ['cooking', 'chef', 'class', 'food'],
+    imageUrl: null,
+    createdAt: '2024-10-02T08:00:00.000Z',
+    updatedAt: '2024-10-02T08:00:00.000Z',
+  },
+  {
+    id: 'idea_3',
+    title: 'Noise-Cancelling Headphones',
+    description: 'Premium over-ear headphones for music and focus.',
+    category: 'Tech',
+    priceRange: '$250–400',
+    tags: ['tech', 'music', 'headphones', 'focus'],
+    imageUrl: null,
+    createdAt: '2024-10-03T08:00:00.000Z',
+    updatedAt: '2024-10-03T08:00:00.000Z',
+  },
+  {
+    id: 'idea_4',
+    title: 'Fine Dining Experience',
+    description: 'A tasting menu dinner for two at a Michelin-starred restaurant.',
+    category: 'Food & Drink',
+    priceRange: '$200–350',
+    tags: ['dinner', 'restaurant', 'michelin', 'couple'],
+    imageUrl: null,
+    createdAt: '2024-10-04T08:00:00.000Z',
+    updatedAt: '2024-10-04T08:00:00.000Z',
+  },
+  {
+    id: 'idea_5',
+    title: 'Coffee Table Art Book',
+    description: 'A beautifully curated art or photography book.',
+    category: 'Art & Creative',
+    priceRange: '$50–100',
+    tags: ['book', 'art', 'photography', 'home'],
+    imageUrl: null,
+    createdAt: '2024-10-05T08:00:00.000Z',
+    updatedAt: '2024-10-05T08:00:00.000Z',
+  },
+  {
+    id: 'idea_6',
+    title: 'Hot Air Balloon Ride',
+    description: 'A sunrise hot air balloon flight over the countryside.',
+    category: 'Experience',
+    priceRange: '$200–300',
+    tags: ['adventure', 'balloon', 'sunrise', 'view'],
+    imageUrl: null,
+    createdAt: '2024-10-06T08:00:00.000Z',
+    updatedAt: '2024-10-06T08:00:00.000Z',
+  },
+]
+
+export const MOCK_USER = {
+  id: 'user_1',
+  name: 'George',
+  email: 'george@example.com',
+  avatarUrl: null,
+  plan: 'free',
+  createdAt: '2024-09-01T00:00:00.000Z',
+}

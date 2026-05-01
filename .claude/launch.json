@@ -1,0 +1,19 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Piksy — Dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "app",
+      "port": 5173
+    },
+    {
+      "name": "Piksy — Preview (production build)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "preview"],
+      "cwd": "app",
+      "port": 4173
+    }
+  ]
+}
