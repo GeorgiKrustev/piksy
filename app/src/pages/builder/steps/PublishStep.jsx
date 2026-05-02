@@ -1,26 +1,51 @@
-import { useEffect, useState } from 'react'
-import { Globe, Lock, Copy, Check } from 'lucide-react'
+import { useEffect, useState, useCallback } from 'react'
+import { Globe, Lock, Copy, Check, Loader } from 'lucide-react'
 import { Input }  from '../../../components/ui/Input'
 import { Button } from '../../../components/ui/Button'
 import { Badge }  from '../../../components/ui/Badge'
 import { PresentStatus } from '../../../types/models'
+import { presents } from '../../../services/presents'
+
+const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 export default function PublishStep({ present, actions }) {
-  const { setPublishDraft, save, publish, unpublish, goPrev } = actions
+  const { setPublishDraft, publish, unpublish, goPrev } = actions
 
   const ps = present.publishSettings
-  const [slug,   setSlug]   = useState(ps.slug ?? '')
-  const [copied, setCopied] = useState(false)
+  const [slug,         setSlug]         = useState(ps.slug ?? '')
+  const [copied,       setCopied]       = useState(false)
+  const [slugStatus,   setSlugStatus]   = useState('idle') // 'idle'|'checking'|'available'|'taken'|'invalid'
 
   const isPublished = present.status === PresentStatus.PUBLISHED
-  const shareUrl    = `https://piksy.app/${slug}`
+  const shareUrl    = `${window.location.origin}/${slug}`
 
+  // Keep draft in sync
   useEffect(() => {
     setPublishDraft({ slug })
   }, [slug, setPublishDraft])
 
+  // Validate slug format client-side, then async availability check
+  const checkSlug = useCallback(async (value) => {
+    if (!value) { setSlugStatus('idle'); return }
+    if (!SLUG_RE.test(value)) { setSlugStatus('invalid'); return }
+
+    setSlugStatus('checking')
+    const available = await presents.checkSlugAvailable(value, undefined)
+    setSlugStatus(available ? 'available' : 'taken')
+  }, [])
+
+  // Debounce the availability check
+  useEffect(() => {
+    const timer = setTimeout(() => { checkSlug(slug) }, 500)
+    return () => clearTimeout(timer)
+  }, [slug, checkSlug])
+
+  function handleSlugChange(e) {
+    const raw = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-')
+    setSlug(raw)
+  }
+
   function handlePublish() {
-    save()
     publish()
   }
 
@@ -29,6 +54,22 @@ export default function PublishStep({ present, actions }) {
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
+
+  const slugHelperText = {
+    idle:      'Lowercase letters, numbers, and hyphens only',
+    checking:  'Checking availability…',
+    available: '✓ Available',
+    taken:     '✗ Already taken — choose another',
+    invalid:   'Only lowercase letters, numbers, and hyphens (no leading/trailing hyphens)',
+  }[slugStatus]
+
+  const slugHelperColor = {
+    available: 'text-green-600',
+    taken:     'text-red-500',
+    invalid:   'text-red-500',
+  }[slugStatus] ?? 'text-stone-400'
+
+  const canPublish = slug && slugStatus !== 'taken' && slugStatus !== 'invalid' && slugStatus !== 'checking'
 
   return (
     <div className="max-w-xl mx-auto px-8 py-8">
@@ -68,12 +109,23 @@ export default function PublishStep({ present, actions }) {
 
       {/* Slug / URL */}
       <div className="flex flex-col gap-5 mb-6">
-        <Input
-          label="URL slug"
-          value={slug}
-          onChange={(e) => setSlug(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-'))}
-          helperText="piksy.app / your-slug"
-        />
+        <div>
+          <div className="flex items-center gap-2">
+            <div className="flex-1">
+              <Input
+                label="URL slug"
+                value={slug}
+                onChange={handleSlugChange}
+              />
+            </div>
+            {slugStatus === 'checking' && (
+              <Loader className="w-4 h-4 text-stone-400 animate-spin mt-6 shrink-0" />
+            )}
+          </div>
+          {slug && (
+            <p className={`text-xs mt-1.5 ${slugHelperColor}`}>{slugHelperText}</p>
+          )}
+        </div>
 
         {isPublished && (
           <div>
@@ -100,7 +152,13 @@ export default function PublishStep({ present, actions }) {
         {isPublished ? (
           <Button variant="outline" size="md" onClick={unpublish}>Unpublish</Button>
         ) : (
-          <Button variant="primary" size="md" leftIcon={<Globe className="w-4 h-4" />} onClick={handlePublish}>
+          <Button
+            variant="primary"
+            size="md"
+            leftIcon={<Globe className="w-4 h-4" />}
+            onClick={handlePublish}
+            disabled={!canPublish}
+          >
             Publish Present
           </Button>
         )}

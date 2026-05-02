@@ -165,7 +165,7 @@ function PublishPreview({ present }) {
       </p>
       {ps.slug && (
         <div className="w-full bg-white border border-[#E8DDD0] rounded-lg px-2 py-1.5">
-          <p className="text-[8px] text-[#8B7B6B] truncate">piksy.app/{ps.slug}</p>
+          <p className="text-[8px] text-[#8B7B6B] truncate">{window.location.hostname}/{ps.slug}</p>
         </div>
       )}
     </div>

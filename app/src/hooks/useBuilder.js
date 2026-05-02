@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo } from 'react'
 import { presentService } from '../services/presentService'
+import { presents as presentsSupabase } from '../services/presents'
 import { BUILDER_STEPS, BuilderStep } from '../types/models'
 
 export function useBuilder(presentId) {
@@ -97,14 +98,19 @@ export function useBuilder(presentId) {
   // ------------------------------------------------------------------
 
   const publish = useCallback(() => {
-    save()
+    const saved = save()
     const updated = presentService.publish(presentId)
     setPresent(updated)
+    // Sync to Supabase (fire-and-forget — local state already updated)
+    const slug = (saved ?? updated)?.publishSettings?.slug
+    if (slug) presentsSupabase.publish(presentId, slug).catch(console.error)
   }, [save, presentId])
 
   const unpublish = useCallback(() => {
     const updated = presentService.unpublish(presentId)
     setPresent(updated)
+    // Sync unpublish to Supabase
+    presentsSupabase.unpublish(presentId).catch(console.error)
   }, [presentId])
 
   return {
