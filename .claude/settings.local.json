@@ -3,7 +3,20 @@
     "allow": [
       "Bash(npm install:*)",
       "Bash(npm run:*)",
-      "Bash(kill %1)"
+      "Bash(kill %1)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git pull:*)",
+      "Bash(git stash:*)",
+      "Bash(supabase --version)",
+      "Bash(npx supabase:*)",
+      "mcp__90a76170-b219-47ec-8bbe-e408e25f18ce__list_projects",
+      "mcp__90a76170-b219-47ec-8bbe-e408e25f18ce__apply_migration",
+      "mcp__90a76170-b219-47ec-8bbe-e408e25f18ce__execute_sql",
+      "Bash(gh pr:*)",
+      "mcp__90a76170-b219-47ec-8bbe-e408e25f18ce__get_project_url",
+      "mcp__90a76170-b219-47ec-8bbe-e408e25f18ce__get_publishable_keys"
     ]
   }
 }
