@@ -1,4 +1,5 @@
-import { useParams } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useParams, useOutletContext } from 'react-router-dom'
 import { clsx } from 'clsx'
 import { Check } from 'lucide-react'
 import { useBuilder }    from '../../store'
@@ -77,8 +78,13 @@ function ActiveStepContent({ step, builder }) {
 
 export default function BuilderPage() {
   const { id }  = useParams()
+  const { setBuilderTitle } = useOutletContext()
   const builder = useBuilder(id)
   const { present, activeStep, stepIndex, steps, actions } = builder
+
+  useEffect(() => {
+    if (present?.title) setBuilderTitle(present.title)
+  }, [present?.title, setBuilderTitle])
 
   if (!present) {
     return (

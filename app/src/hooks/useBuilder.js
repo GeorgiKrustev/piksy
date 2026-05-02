@@ -1,22 +1,7 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import { presentService } from '../services/presentService'
 import { BUILDER_STEPS, BuilderStep } from '../types/models'
 
-/**
- * useBuilder — manages the full builder session for one PresentWebsite.
- *
- * Keeps a local draft copy that is synced to storage on every save,
- * so the user never loses work when switching steps.
- *
- * Returns:
- *   present     — latest saved copy from storage
- *   draft       — in-progress local edits for the current step
- *   activeStep  — current BuilderStep id
- *   stepIndex   — 0-based index into BUILDER_STEPS
- *   steps       — BUILDER_STEPS constant (for nav rendering)
- *   isDirty     — whether draft differs from saved
- *   actions     — navigation + save + field-update helpers
- */
 export function useBuilder(presentId) {
   const [present, setPresent] = useState(() => presentService.getById(presentId))
   const [activeStep, setActiveStep] = useState(BuilderStep.LANDING)
@@ -54,15 +39,15 @@ export function useBuilder(presentId) {
   // Draft helpers (each step patches just its slice)
   // ------------------------------------------------------------------
 
-  const setLandingDraft  = useCallback((patch) =>
-    setDraft((d) => ({ ...d, landingPage:  { ...(d?.landingPage  ?? present?.landingPage),  ...patch } })),
+  const setLandingDraft = useCallback((patch) =>
+    setDraft((d) => ({ ...d, landingPage: { ...(d?.landingPage ?? present?.landingPage), ...patch } })),
   [present])
 
-  const setFinalDraft    = useCallback((patch) =>
-    setDraft((d) => ({ ...d, finalScreen:  { ...(d?.finalScreen  ?? present?.finalScreen),  ...patch } })),
+  const setFinalDraft = useCallback((patch) =>
+    setDraft((d) => ({ ...d, finalScreen: { ...(d?.finalScreen ?? present?.finalScreen), ...patch } })),
   [present])
 
-  const setPublishDraft  = useCallback((patch) =>
+  const setPublishDraft = useCallback((patch) =>
     setDraft((d) => ({ ...d, publishSettings: { ...(d?.publishSettings ?? present?.publishSettings), ...patch } })),
   [present])
 
@@ -89,10 +74,10 @@ export function useBuilder(presentId) {
   }, [save, goNext])
 
   // ------------------------------------------------------------------
-  // Gift option actions (delegate to service, refresh present)
+  // Gift option actions — memoized so referential identity is stable
   // ------------------------------------------------------------------
 
-  const giftActions = {
+  const giftActions = useMemo(() => ({
     add(data) {
       presentService.addGiftOption(presentId, data)
       refreshPresent()
@@ -105,7 +90,7 @@ export function useBuilder(presentId) {
       presentService.removeGiftOption(presentId, optionId)
       refreshPresent()
     },
-  }
+  }), [presentId, refreshPresent])
 
   // ------------------------------------------------------------------
   // Publish

@@ -32,36 +32,6 @@ export function usePresents() {
       return updated
     },
 
-    updateLandingPage(id, landingPage) {
-      presentService.updateLandingPage(id, landingPage)
-      refresh()
-    },
-
-    updateFinalScreen(id, finalScreen) {
-      presentService.updateFinalScreen(id, finalScreen)
-      refresh()
-    },
-
-    updatePublishSettings(id, settings) {
-      presentService.updatePublishSettings(id, settings)
-      refresh()
-    },
-
-    addGiftOption(presentId, data) {
-      presentService.addGiftOption(presentId, data)
-      refresh()
-    },
-
-    updateGiftOption(presentId, optionId, updates) {
-      presentService.updateGiftOption(presentId, optionId, updates)
-      refresh()
-    },
-
-    removeGiftOption(presentId, optionId) {
-      presentService.removeGiftOption(presentId, optionId)
-      refresh()
-    },
-
     publish(id) {
       presentService.publish(id)
       refresh()

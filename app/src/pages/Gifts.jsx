@@ -14,7 +14,7 @@ import { GIFT_CATEGORIES } from '../types/models'
 // Gift Idea form (shared by create + edit modals)
 // ---------------------------------------------------------------------------
 
-function GiftIdeaForm({ initial = {}, onSave, onCancel, loading }) {
+function GiftIdeaForm({ initial = {}, onSave, onCancel, loading, formId }) {
   const [form, setForm] = useState({
     title:       initial.title       ?? '',
     description: initial.description ?? '',
@@ -48,7 +48,7 @@ function GiftIdeaForm({ initial = {}, onSave, onCancel, loading }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <form id={formId} onSubmit={handleSubmit} className="flex flex-col gap-4">
       <Input
         label="Title"
         placeholder="e.g. Weekend Spa Retreat"
@@ -92,7 +92,6 @@ function GiftIdeaForm({ initial = {}, onSave, onCancel, loading }) {
         onChange={set('tags')}
         helperText="Comma-separated"
       />
-      <button type="submit" className="hidden" aria-hidden="true" />
     </form>
   )
 }
@@ -150,7 +149,7 @@ function GiftIdeaCard({ idea, onEdit, onDelete }) {
 export default function Gifts() {
   const { ideas, actions } = useGifts()
   const [search,       setSearch]       = useState('')
-  const [activeCategory, setCategory]   = useState('')
+  const [activeCategory, setActiveCategory] = useState('')
   const [showCreate,   setShowCreate]   = useState(false)
   const [editingIdea,  setEditingIdea]  = useState(null)
   const [saveLoading,  setSaveLoading]  = useState(false)
@@ -187,7 +186,7 @@ export default function Gifts() {
   )
 
   return (
-    <div className="px-8 py-8">
+    <div className="max-w-6xl mx-auto px-8 py-8">
       {/* Header */}
       <div className="flex items-start justify-between mb-6">
         <div>
@@ -224,7 +223,7 @@ export default function Gifts() {
         {/* Category chips */}
         <div className="flex items-center gap-1.5 flex-wrap">
           <button
-            onClick={() => setCategory('')}
+            onClick={() => setActiveCategory('')}
             className={`h-7 px-3 rounded-full text-xs font-medium transition-all ${
               !activeCategory
                 ? 'bg-stone-800 text-white'
@@ -236,7 +235,7 @@ export default function Gifts() {
           {categoriesWithCount.map((c) => (
             <button
               key={c}
-              onClick={() => setCategory(c === activeCategory ? '' : c)}
+              onClick={() => setActiveCategory(c === activeCategory ? '' : c)}
               className={`h-7 px-3 rounded-full text-xs font-medium transition-all ${
                 activeCategory === c
                   ? 'bg-terracotta-500 text-white'
@@ -282,15 +281,13 @@ export default function Gifts() {
         footer={
           <>
             <Button variant="ghost" size="sm" onClick={() => setShowCreate(false)}>Cancel</Button>
-            <Button variant="primary" size="sm" loading={saveLoading} onClick={() => document.getElementById('gift-form-create')?.requestSubmit()}>
+            <Button variant="primary" size="sm" loading={saveLoading} type="submit" form="gift-form-create">
               Save Idea
             </Button>
           </>
         }
       >
-        <form id="gift-form-create" onSubmit={(e) => { e.preventDefault(); document.getElementById('gift-form-create-inner')?.dispatchEvent(new Event('submit', { bubbles: true })) }}>
-          <GiftIdeaForm onSave={handleCreate} onCancel={() => setShowCreate(false)} loading={saveLoading} />
-        </form>
+        <GiftIdeaForm formId="gift-form-create" onSave={handleCreate} onCancel={() => setShowCreate(false)} loading={saveLoading} />
       </Modal>
 
       {/* Edit modal */}
@@ -301,16 +298,14 @@ export default function Gifts() {
         footer={
           <>
             <Button variant="ghost" size="sm" onClick={() => setEditingIdea(null)}>Cancel</Button>
-            <Button variant="primary" size="sm" loading={saveLoading} onClick={() => document.getElementById('gift-form-edit')?.requestSubmit()}>
+            <Button variant="primary" size="sm" loading={saveLoading} type="submit" form="gift-form-edit">
               Save Changes
             </Button>
           </>
         }
       >
         {editingIdea && (
-          <form id="gift-form-edit" onSubmit={(e) => { e.preventDefault() }}>
-            <GiftIdeaForm initial={editingIdea} onSave={handleEdit} onCancel={() => setEditingIdea(null)} loading={saveLoading} />
-          </form>
+          <GiftIdeaForm formId="gift-form-edit" initial={editingIdea} onSave={handleEdit} onCancel={() => setEditingIdea(null)} loading={saveLoading} />
         )}
       </Modal>
     </div>

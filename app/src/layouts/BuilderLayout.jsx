@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Outlet, useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { presentService } from '../services/presentService'
@@ -7,11 +8,15 @@ import { presentService } from '../services/presentService'
  * The step nav, editor panel, and preview panel are rendered by BuilderPage
  * (the <Outlet>), which has full access to the present via useBuilder().
  * This layout only provides the outer chrome (top bar with back link + present title).
+ * BuilderPage calls setBuilderTitle (received via Outlet context) whenever the
+ * present title changes so the breadcrumb stays in sync.
  */
 export default function BuilderLayout() {
   const { id }   = useParams()
   const navigate = useNavigate()
-  const present  = presentService.getById(id)
+  const [title, setBuilderTitle] = useState(
+    () => presentService.getById(id)?.title ?? 'Builder'
+  )
 
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-cream-100">
@@ -26,13 +31,13 @@ export default function BuilderLayout() {
         </button>
         <span className="text-stone-200">/</span>
         <span className="text-sm font-medium text-stone-700 truncate">
-          {present?.title ?? 'Builder'}
+          {title}
         </span>
       </header>
 
       {/* Builder content fills remaining height */}
       <div className="flex-1 overflow-hidden">
-        <Outlet />
+        <Outlet context={{ setBuilderTitle }} />
       </div>
     </div>
   )

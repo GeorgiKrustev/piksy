@@ -3,7 +3,9 @@ import { Input }    from '../../../components/ui/Input'
 import { Textarea } from '../../../components/ui/Textarea'
 import { Button }   from '../../../components/ui/Button'
 
-export default function LandingStep({ present, draft, actions }) {
+export default function LandingStep({ present, actions }) {
+  const { setLandingDraft, save, saveAndNext } = actions
+
   const saved = present.landingPage
   const [form, setForm] = useState({
     heroTitle:    saved.heroTitle    ?? '',
@@ -11,10 +13,9 @@ export default function LandingStep({ present, draft, actions }) {
     heroMessage:  saved.heroMessage  ?? '',
   })
 
-  // Propagate changes to draft whenever form changes
   useEffect(() => {
-    actions.setLandingDraft(form)
-  }, [form]) // eslint-disable-line react-hooks/exhaustive-deps
+    setLandingDraft(form)
+  }, [form, setLandingDraft])
 
   function set(field) {
     return (e) => setForm((f) => ({ ...f, [field]: e.target.value }))
@@ -55,12 +56,8 @@ export default function LandingStep({ present, draft, actions }) {
       </div>
 
       <div className="flex justify-end gap-2 mt-8 pt-6 border-t border-stone-100">
-        <Button variant="secondary" size="sm" onClick={actions.save}>
-          Save
-        </Button>
-        <Button variant="primary" size="sm" onClick={actions.saveAndNext}>
-          Save & Continue
-        </Button>
+        <Button variant="secondary" size="sm" onClick={save}>Save</Button>
+        <Button variant="primary"   size="sm" onClick={saveAndNext}>Save & Continue</Button>
       </div>
     </div>
   )

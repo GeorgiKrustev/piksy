@@ -1,16 +1,10 @@
 import { storageService } from './storageService'
-import { MOCK_GIFT_IDEAS } from '../data/mockData'
 import { createGiftIdea } from '../types/models'
 import { nowISO } from '../utils/helpers'
 
 const KEY = 'gift_ideas'
 
-function seed() {
-  if (!storageService.get(KEY)) storageService.set(KEY, MOCK_GIFT_IDEAS)
-}
-
 function all() {
-  seed()
   return /** @type {import('../types/models').GiftIdea[]} */ (storageService.get(KEY) ?? [])
 }
 

@@ -1,16 +1,10 @@
 import { storageService } from './storageService'
-import { MOCK_PRESENTS } from '../data/mockData'
 import { createPresent, createGiftOption, createRecipient, PresentStatus } from '../types/models'
 import { nowISO } from '../utils/helpers'
 
 const KEY = 'presents'
 
-function seed() {
-  if (!storageService.get(KEY)) storageService.set(KEY, MOCK_PRESENTS)
-}
-
 function all() {
-  seed()
   return /** @type {import('../types/models').PresentWebsite[]} */ (storageService.get(KEY) ?? [])
 }
 
@@ -70,14 +64,6 @@ export const presentService = {
     list[index]   = updated
     persist(list)
     return updated
-  },
-
-  updateTitle(id, title) {
-    return this.update(id, { title })
-  },
-
-  updateRecipient(id, recipient) {
-    return this.update(id, { recipient })
   },
 
   updateLandingPage(id, landingPage) {

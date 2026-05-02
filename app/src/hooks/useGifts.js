@@ -33,17 +33,6 @@ export function useGifts() {
       refresh()
     },
 
-    search(query) {
-      setIdeas(giftService.search(query))
-    },
-
-    filterByCategory(category) {
-      setIdeas(category ? giftService.getByCategory(category) : giftService.getAll())
-    },
-
-    clearFilters() {
-      setIdeas(giftService.getAll())
-    },
   }
 
   return { ideas, actions, refresh }

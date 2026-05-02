@@ -3,7 +3,9 @@ import { Input }    from '../../../components/ui/Input'
 import { Textarea } from '../../../components/ui/Textarea'
 import { Button }   from '../../../components/ui/Button'
 
-export default function FinalStep({ present, draft, actions }) {
+export default function FinalStep({ present, actions }) {
+  const { setFinalDraft, goPrev, saveAndNext } = actions
+
   const saved = present.finalScreen
   const [form, setForm] = useState({
     title:    saved.title    ?? '',
@@ -12,8 +14,8 @@ export default function FinalStep({ present, draft, actions }) {
   })
 
   useEffect(() => {
-    actions.setFinalDraft(form)
-  }, [form]) // eslint-disable-line react-hooks/exhaustive-deps
+    setFinalDraft(form)
+  }, [form, setFinalDraft])
 
   function set(field) {
     return (e) => setForm((f) => ({ ...f, [field]: e.target.value }))
@@ -54,8 +56,8 @@ export default function FinalStep({ present, draft, actions }) {
       </div>
 
       <div className="flex justify-end gap-2 mt-8 pt-6 border-t border-stone-100">
-        <Button variant="ghost" size="sm" onClick={actions.goPrev}>Back</Button>
-        <Button variant="primary" size="sm" onClick={actions.saveAndNext}>Save & Continue</Button>
+        <Button variant="ghost"   size="sm" onClick={goPrev}>Back</Button>
+        <Button variant="primary" size="sm" onClick={saveAndNext}>Save & Continue</Button>
       </div>
     </div>
   )

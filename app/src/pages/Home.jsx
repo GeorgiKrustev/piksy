@@ -50,7 +50,7 @@ function PresentRow({ present, onOpen }) {
 
 export default function Home() {
   const navigate = useNavigate()
-  const { presents, actions } = usePresents()
+  const { presents } = usePresents()
   const { ideas }             = useGifts()
 
   const published  = presents.filter((p) => p.status === PresentStatus.PUBLISHED)
@@ -73,7 +73,7 @@ export default function Home() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         <StatCard icon={Gift}     label="Total presents" value={presents.length} />
         <StatCard icon={Globe}    label="Published"       value={published.length} accent />
         <StatCard icon={Sparkles} label="Gift ideas"      value={ideas.length} />

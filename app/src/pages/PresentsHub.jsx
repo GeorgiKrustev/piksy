@@ -1,12 +1,11 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Plus, Gift, Pencil, Trash2, Globe, Lock, ChevronRight } from 'lucide-react'
+import { Plus, Gift, Pencil, Trash2 } from 'lucide-react'
 import { usePresents }  from '../store'
 import { Button }       from '../components/ui/Button'
 import { Card }         from '../components/ui/Card'
 import { Badge }        from '../components/ui/Badge'
 import { Input }        from '../components/ui/Input'
-import { Textarea }     from '../components/ui/Textarea'
 import { EmptyState }   from '../components/ui/EmptyState'
 import { Modal }        from '../components/ui/Modal'
 import { formatDate }   from '../utils/helpers'
@@ -181,7 +180,7 @@ export default function PresentsHub() {
   const sorted = [...presents].sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
 
   return (
-    <div className="px-8 py-8">
+    <div className="max-w-5xl mx-auto px-8 py-8">
       {/* Header */}
       <div className="flex items-start justify-between mb-8">
         <div>

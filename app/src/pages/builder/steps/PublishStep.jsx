@@ -6,24 +6,22 @@ import { Badge }  from '../../../components/ui/Badge'
 import { PresentStatus } from '../../../types/models'
 
 export default function PublishStep({ present, actions }) {
-  const ps      = present.publishSettings
-  const [slug,  setSlug]  = useState(ps.slug ?? '')
+  const { setPublishDraft, save, publish, unpublish, goPrev } = actions
+
+  const ps = present.publishSettings
+  const [slug,   setSlug]   = useState(ps.slug ?? '')
   const [copied, setCopied] = useState(false)
 
   const isPublished = present.status === PresentStatus.PUBLISHED
   const shareUrl    = `https://piksy.app/${slug}`
 
   useEffect(() => {
-    actions.setPublishDraft({ slug })
-  }, [slug]) // eslint-disable-line react-hooks/exhaustive-deps
+    setPublishDraft({ slug })
+  }, [slug, setPublishDraft])
 
   function handlePublish() {
-    actions.save()
-    actions.publish()
-  }
-
-  function handleUnpublish() {
-    actions.unpublish()
+    save()
+    publish()
   }
 
   function handleCopy() {
@@ -77,7 +75,6 @@ export default function PublishStep({ present, actions }) {
           helperText="piksy.app / your-slug"
         />
 
-        {/* Share link */}
         {isPublished && (
           <div>
             <p className="text-sm font-medium text-stone-700 mb-1.5">Share link</p>
@@ -101,17 +98,13 @@ export default function PublishStep({ present, actions }) {
       {/* Actions */}
       <div className="flex items-center gap-3">
         {isPublished ? (
-          <Button variant="outline" size="md" onClick={handleUnpublish}>
-            Unpublish
-          </Button>
+          <Button variant="outline" size="md" onClick={unpublish}>Unpublish</Button>
         ) : (
           <Button variant="primary" size="md" leftIcon={<Globe className="w-4 h-4" />} onClick={handlePublish}>
             Publish Present
           </Button>
         )}
-        <Button variant="ghost" size="sm" onClick={actions.goPrev}>
-          Back
-        </Button>
+        <Button variant="ghost" size="sm" onClick={goPrev}>Back</Button>
       </div>
     </div>
   )
